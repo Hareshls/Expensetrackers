@@ -1,0 +1,11 @@
+/* Clear default Vite styles that interfere with the custom layout */
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* Prevent double scrollbars */
+}
