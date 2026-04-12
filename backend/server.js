@@ -12,18 +12,18 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-const allowedOrigins = [
-    'http://localhost:5173',
-    process.env.FRONTEND_URL,
-].filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        // Allow localhost for development
+        if (origin.startsWith('http://localhost')) return callback(null, true);
+        // Allow any onrender.com subdomain for production
+        if (origin.endsWith('.onrender.com')) return callback(null, true);
+        // Allow custom FRONTEND_URL if set
+        if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true);
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
