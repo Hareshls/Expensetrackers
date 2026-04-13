@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
         res.cookie('token', token, cookieOptions(req));
 
         res.status(201).json({
+            token,
             user: { id: user._id, name: user.name, email: user.email, currency: user.currency, monthlyBudget: user.monthlyBudget, salary: user.salary }
         });
     } catch (error) {
@@ -51,6 +52,7 @@ router.post('/login', async (req, res) => {
         res.cookie('token', token, cookieOptions(req));
 
         res.status(200).json({
+            token,
             user: { id: user._id, name: user.name, email: user.email, currency: user.currency, monthlyBudget: user.monthlyBudget, salary: user.salary }
         });
     } catch (error) {

@@ -21,6 +21,9 @@ const Auth = ({ onLogin }) => {
                 ? await authAPI.login({ email: formData.email, password: formData.password })
                 : await authAPI.register(formData);
 
+            if (response.data.token) {
+                localStorage.setItem('token', response.data.token);
+            }
             onLogin(response.data.user);
         } catch (err) {
             setError(err.response?.data?.message || "An error occurred");

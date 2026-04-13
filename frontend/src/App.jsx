@@ -21,6 +21,7 @@ function App() {
       } catch (err) {
         // Not logged in or session expired
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
       } finally {
         setLoading(false);
       }
@@ -46,6 +47,7 @@ function App() {
     }
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   if (loading) return null;
