@@ -135,7 +135,6 @@ const Analytics = ({ user }) => {
                                 {spent > 0 && (
                                     <span className="cal-day-amt">₹{spent >= 1000 ? `${(spent / 1000).toFixed(1)}k` : spent}</span>
                                 )}
-                                {isMostSpent && <span className="cal-flame">🔥</span>}
                             </div>
                         );
                     })}
