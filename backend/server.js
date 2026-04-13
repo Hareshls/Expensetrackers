@@ -17,6 +17,7 @@ app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = [
             'https://fintrack.lsharesh.com',
+            'http://fintrack.lsharesh.com',
             'http://localhost:5173',
             'http://localhost:3000'
         ];
@@ -33,12 +34,15 @@ app.use(cors({
             callback(null, true);
         } else {
             console.log('CORS blocked origin:', origin);
-            callback(new Error('Not allowed by CORS'));
+            // Using callback(null, false) instead of Error can prevent 500 responses 
+            // during preflight which cause the generic "No CORS header" error
+            callback(null, false);
         }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 }));
 
 app.use('/api/auth', authRoutes);
