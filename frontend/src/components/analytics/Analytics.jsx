@@ -182,11 +182,76 @@ const Analytics = ({ user }) => {
 
             <div className="analytics-grid">
 
-                {/* ── Category Bar Chart ──────────────────── */}
-                <div className="card main-chart-card animate-in">
+                {/* ── Quick Insights (first) ───────────────── */}
+                <div className="card insight-card animate-in">
+                    <h3 style={{ marginBottom: '20px' }}>Quick Insights</h3>
+                    <div className="insights-row">
+                        {highestCategory && (
+                            <div className="insight-item">
+                                <div className="insight-icon" style={{ backgroundColor: "#fee2e2" }}>
+                                    <TrendingUp size={18} color="#ef4444" />
+                                </div>
+                                <div className="insight-text">
+                                    <h4>{highestCategory.name} Heavy</h4>
+                                    <p>{highestCategory.name} takes {Math.round((highestCategory.amount / totalSpending) * 100)}% of total spending.</p>
+                                </div>
+                            </div>
+                        )}
+                        <div className="insight-item">
+                            <div className="insight-icon" style={{ backgroundColor: "#dcfce7" }}>
+                                <CreditCard size={18} color="#15803d" />
+                            </div>
+                            <div className="insight-text">
+                                <h4>Transactions</h4>
+                                <p>{expenses.length} total transactions recorded.</p>
+                            </div>
+                        </div>
+                        {mostSpentDay && (
+                            <div className="insight-item">
+                                <div className="insight-icon" style={{ backgroundColor: "#fef3c7" }}>
+                                    <Flame size={18} color="#d97706" />
+                                </div>
+                                <div className="insight-text">
+                                    <h4>Highest Spend Day</h4>
+                                    <p>Day {mostSpentDay} — ₹{daySpending[mostSpentDay]?.toLocaleString()} spent this month.</p>
+                                </div>
+                            </div>
+                        )}
+                        <div className="insight-item">
+                            <div className="insight-icon" style={{ backgroundColor: "#e0e7ff" }}>
+                                <Target size={18} color="#4338ca" />
+                            </div>
+                            <div className="insight-text">
+                                <h4>Budget Usage</h4>
+                                <p>{monthlyBudget > 0 ? `${budgetUsage}% of ₹${monthlyBudget.toLocaleString()} used.` : 'No budget set. Go to Dashboard to set one.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {monthlyBudget > 0 && (
+                        <div style={{ marginTop: 16 }}>
+                            <div style={{ background: '#f1f5f9', borderRadius: 8, height: 10, overflow: 'hidden' }}>
+                                <div style={{
+                                    height: '100%',
+                                    width: `${Math.min(budgetUsage, 100)}%`,
+                                    background: budgetExceeded ? '#ef4444' : budgetNear ? '#f97316' : '#10b981',
+                                    borderRadius: 8,
+                                    transition: 'width 1s ease'
+                                }} />
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: '#64748b' }}>
+                                <span>₹0</span>
+                                <span style={{ fontWeight: 600 }}>{budgetUsage}% used</span>
+                                <span>₹{monthlyBudget.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* ── Category Chart (below insights) ─────── */}
+                <div className="card main-chart-card animate-in" style={{ animationDelay: '0.1s' }}>
                     <h3 style={{ marginBottom: '24px' }}>Category Wise Spending</h3>
                     {chartData.length > 0 ? (
-                        <div style={{ width: '100%', height: 300 }}>
+                        <div style={{ width: '100%', height: 320 }}>
                             <ResponsiveContainer>
                                 <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 40 }}>
                                     <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
@@ -197,14 +262,14 @@ const Analytics = ({ user }) => {
                                         axisLine={false}
                                         tickLine={false}
                                         tick={{ fill: '#1e293b', fontSize: 13, fontWeight: 500 }}
-                                        width={90}
+                                        width={100}
                                     />
                                     <Tooltip
                                         cursor={{ fill: 'transparent' }}
                                         contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                                         formatter={(value) => [`₹${value.toLocaleString()}`, 'Spent']}
                                     />
-                                    <Bar dataKey="amount" radius={[0, 6, 6, 0]} barSize={22}>
+                                    <Bar dataKey="amount" radius={[0, 6, 6, 0]} barSize={28}>
                                         {chartData.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={entry.color} />
                                         ))}
@@ -218,76 +283,6 @@ const Analytics = ({ user }) => {
                             <p>No expenses yet to analyze.</p>
                         </div>
                     )}
-                </div>
-
-                {/* ── Quick Insights ──────────────────────── */}
-                <div className="insights-column animate-in" style={{ animationDelay: '0.1s' }}>
-                    <div className="card insight-card">
-                        <h3 style={{ marginBottom: '20px' }}>Quick Insights</h3>
-
-                        {highestCategory && (
-                            <div className="insight-item">
-                                <div className="insight-icon" style={{ backgroundColor: "#fee2e2" }}>
-                                    <TrendingUp size={18} color="#ef4444" />
-                                </div>
-                                <div className="insight-text">
-                                    <h4>{highestCategory.name} Heavy</h4>
-                                    <p>{highestCategory.name} takes {Math.round((highestCategory.amount / totalSpending) * 100)}% of total spending.</p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="insight-item">
-                            <div className="insight-icon" style={{ backgroundColor: "#dcfce7" }}>
-                                <CreditCard size={18} color="#15803d" />
-                            </div>
-                            <div className="insight-text">
-                                <h4>Transactions</h4>
-                                <p>{expenses.length} total transactions recorded.</p>
-                            </div>
-                        </div>
-
-                        {mostSpentDay && (
-                            <div className="insight-item">
-                                <div className="insight-icon" style={{ backgroundColor: "#fef3c7" }}>
-                                    <Flame size={18} color="#d97706" />
-                                </div>
-                                <div className="insight-text">
-                                    <h4>Highest Spend Day</h4>
-                                    <p>Day {mostSpentDay} — ₹{daySpending[mostSpentDay]?.toLocaleString()} spent this month.</p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="insight-item">
-                            <div className="insight-icon" style={{ backgroundColor: "#e0e7ff" }}>
-                                <Target size={18} color="#4338ca" />
-                            </div>
-                            <div className="insight-text">
-                                <h4>Budget Usage</h4>
-                                <p>{monthlyBudget > 0 ? `${budgetUsage}% of ₹${monthlyBudget.toLocaleString()} used.` : 'No budget set. Go to Dashboard to set one.'}</p>
-                            </div>
-                        </div>
-
-                        {/* Budget progress bar */}
-                        {monthlyBudget > 0 && (
-                            <div style={{ marginTop: 8 }}>
-                                <div style={{ background: '#f1f5f9', borderRadius: 8, height: 8, overflow: 'hidden' }}>
-                                    <div style={{
-                                        height: '100%',
-                                        width: `${Math.min(budgetUsage, 100)}%`,
-                                        background: budgetExceeded ? '#ef4444' : budgetNear ? '#f97316' : '#10b981',
-                                        borderRadius: 8,
-                                        transition: 'width 1s ease'
-                                    }} />
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: '#64748b' }}>
-                                    <span>₹0</span>
-                                    <span>₹{monthlyBudget.toLocaleString()}</span>
-                                </div>
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
 

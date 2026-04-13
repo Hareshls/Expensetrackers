@@ -94,6 +94,7 @@ body {
   padding: 30px 40px;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 @media (max-width: 1024px) {
@@ -217,7 +218,7 @@ body {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 500px) {
   .stats-grid {
     grid-template-columns: 1fr;
   }
@@ -230,6 +231,11 @@ body {
 }
 
 @media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
   .charts-grid {
     grid-template-columns: 1fr;
   }

@@ -109,7 +109,7 @@ function App() {
     <>
       <Toast toasts={toasts} removeToast={removeToast} />
       <Layout page={page} setPage={setPage} onLogout={handleLogout} user={user}>
-        {page === "dashboard" && <Dashboard user={user} onUpdateUser={handleUpdateUser} addToast={addToast} />}
+        {page === "dashboard" && <Dashboard user={user} onUpdateUser={handleUpdateUser} addToast={addToast} setPage={setPage} />}
         {page === "expenses" && <Expenses user={user} addToast={addToast} />}
         {page === "analytics" && <Analytics user={user} onUpdateUser={handleUpdateUser} addToast={addToast} />}
       </Layout>

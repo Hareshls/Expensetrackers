@@ -2,11 +2,11 @@ import StatsCard from "./StatsCard";
 import CategoryChart from "./CategoryChart";
 import MonthlyTrend from "./MonthlyTrend";
 import "../../styles/dashboard.css";
-import { Wallet, TrendingUp, CreditCard, ShoppingBag, PiggyBank, Edit3, X, Check } from "lucide-react";
+import { Wallet, TrendingUp, CreditCard, ShoppingBag, PiggyBank, Edit3, X, Check, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { expenseAPI, authAPI } from "../../services/api";
 
-const Dashboard = ({ user, onUpdateUser }) => {
+const Dashboard = ({ user, onUpdateUser, setPage }) => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditingPlan, setIsEditingPlan] = useState(false);
@@ -67,6 +67,12 @@ const Dashboard = ({ user, onUpdateUser }) => {
 
   return (
     <div className="content-body">
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+        <button className="primary-btn" onClick={() => setPage && setPage("expenses")}>
+          <Plus size={18} /> Add Expense
+        </button>
+      </div>
+
       <div className="dashboard-top">
         <div className="plan-summary-card card animate-in">
           <div className="plan-header">
@@ -189,7 +195,7 @@ const Dashboard = ({ user, onUpdateUser }) => {
         <div className="card">
           <div className="activity-header">
             <h3 style={{ margin: 0, fontSize: '18px' }}>Recent Transactions</h3>
-            <button className="text-btn">View All</button>
+            <button className="text-btn" onClick={() => setPage && setPage("expenses")}>View All</button>
           </div>
           <div className="activity-list">
             {expenses.slice(0, 5).map((expense) => (
@@ -400,8 +406,11 @@ const Dashboard = ({ user, onUpdateUser }) => {
         .stats-grid {
           flex: 1;
           margin-bottom: 0 !important;
+          display: grid;
+          gap: 20px;
+          grid-template-columns: repeat(2, 1fr);
         }
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
           .dashboard-top {
             flex-direction: column;
           }
@@ -409,6 +418,19 @@ const Dashboard = ({ user, onUpdateUser }) => {
             width: 100%;
             min-width: unset;
           }
+          .stats-grid {
+             grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 640px) {
+           .stats-grid {
+             grid-template-columns: 1fr 1fr !important;
+           }
+        }
+        @media (max-width: 500px) {
+           .stats-grid {
+             grid-template-columns: 1fr !important;
+           }
         }
       `}</style>
     </div>
