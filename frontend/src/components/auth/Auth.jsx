@@ -107,7 +107,7 @@ const Auth = ({ onLogin }) => {
           align-items: center;
           justify-content: center;
           background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
-          padding: 20px;
+          padding: 16px;
         }
         .auth-container {
           width: 100%;
@@ -116,37 +116,60 @@ const Auth = ({ onLogin }) => {
           border-radius: 24px;
         }
         @media (max-width: 480px) {
+          .auth-wrapper {
+            align-items: flex-start;
+            padding-top: 24px;
+          }
           .auth-container {
-            padding: 28px 22px;
+            padding: 22px 18px;
+            border-radius: 20px;
           }
         }
         .auth-header {
            text-align: center;
-           margin-bottom: 32px;
+           margin-bottom: 24px;
         }
         .logo-icon-large {
-           width: 48px;
-           height: 48px;
+           width: 44px;
+           height: 44px;
            background: #e0e7ff;
            border-radius: 14px;
            display: flex;
            align-items: center;
            justify-content: center;
-           margin: 0 auto 20px auto;
+           margin: 0 auto 14px auto;
         }
         .auth-header h1 {
            margin: 0;
-           font-size: 28px;
+           font-size: 26px;
            color: #0f172a;
         }
         .auth-header p {
            color: #64748b;
-           margin-top: 8px;
+           margin-top: 6px;
+           font-size: 14px;
+        }
+        @media (max-width: 480px) {
+          .auth-header {
+            margin-bottom: 16px;
+          }
+          .logo-icon-large {
+            width: 38px;
+            height: 38px;
+            margin-bottom: 10px;
+          }
+          .auth-header h1 {
+            font-size: 22px;
+          }
+          .auth-header p {
+            font-size: 13px;
+            margin-top: 4px;
+          }
         }
         .auth-form {
            display: flex;
            flex-direction: column;
-           gap: 20px;
+           gap: 14px;
         }
         .form-group {
            display: flex;
@@ -162,7 +185,7 @@ const Auth = ({ onLogin }) => {
            gap: 8px;
         }
         .form-group input {
-           padding: 12px 16px;
+           padding: 11px 14px;
            border: 1px solid #e2e8f0;
            border-radius: 12px;
            background: #f8fafc;
@@ -175,13 +198,13 @@ const Auth = ({ onLogin }) => {
            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
         .auth-submit {
-           margin-top: 10px;
+           margin-top: 6px;
            width: 100%;
-           height: 50px;
+           height: 48px;
         }
         .toggle-btn {
           width: 100%;
-          padding: 14px;
+          padding: 12px;
           background: #f1f5f9;
           border: 1.5px solid #e2e8f0;
           border-radius: 12px;
