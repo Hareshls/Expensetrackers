@@ -100,7 +100,12 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
 
       <style>{`
         .expense-form-container {
-          padding: 32px;
+          padding: 28px;
+        }
+        @media (max-width: 480px) {
+          .expense-form-container {
+            padding: 20px 18px;
+          }
         }
         .form-header {
           display: flex;
@@ -134,7 +139,13 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
         .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 20px;
+          gap: 16px;
+        }
+        @media (max-width: 480px) {
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
         }
         label {
           font-size: 14px;
@@ -166,6 +177,16 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
           justify-content: flex-end;
           gap: 12px;
           margin-top: 12px;
+        }
+        @media (max-width: 480px) {
+          .form-actions {
+            flex-direction: column-reverse;
+            gap: 10px;
+          }
+          .form-actions button {
+            width: 100%;
+            justify-content: center;
+          }
         }
         .secondary-btn {
           padding: 12px 24px;
