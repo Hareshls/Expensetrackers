@@ -14,6 +14,20 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Response interceptor to handle 401 errors
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('loginTime');
+            window.dispatchEvent(new Event('auth-error'));
+        }
+        return Promise.reject(error);
+    }
+);
+
 export const authAPI = {
     login: (credentials) => api.post('/auth/login', credentials),
     register: (userData) => api.post('/auth/register', userData),
