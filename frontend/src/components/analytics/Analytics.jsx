@@ -91,7 +91,65 @@ const Analytics = ({ user }) => {
     return (
         <div className="content-body">
 
-            {/* ── Budget Alert Banner ─────────────────────── */}
+            {/* ── Monthly Calendar ── TOP ────────────────── */}
+            <div className="card calendar-card animate-in" style={{ marginBottom: 24 }}>
+                <div className="calendar-header">
+                    <h3 style={{ margin: 0 }}>📅 Monthly Spending Calendar</h3>
+                    <div className="cal-nav">
+                        <button className="cal-nav-btn" onClick={prevMonth}><ChevronLeft size={18} /></button>
+                        <span className="cal-month-label">{monthName}</span>
+                        <button className="cal-nav-btn" onClick={nextMonth}><ChevronRight size={18} /></button>
+                    </div>
+                </div>
+
+                {/* Legend */}
+                <div className="cal-legend">
+                    <span><span className="legend-dot" style={{ background: '#86efac' }} />Low</span>
+                    <span><span className="legend-dot" style={{ background: '#f59e0b' }} />Medium</span>
+                    <span><span className="legend-dot" style={{ background: '#f97316' }} />High</span>
+                    <span><span className="legend-dot" style={{ background: '#ef4444' }} />Highest</span>
+                </div>
+
+                {/* Day labels + grid */}
+                <div className="cal-grid">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                        <div key={d} className="cal-day-label">{d}</div>
+                    ))}
+                    {Array.from({ length: firstDay }).map((_, i) => (
+                        <div key={`empty-${i}`} />
+                    ))}
+                    {Array.from({ length: daysInMonth }).map((_, i) => {
+                        const day = i + 1;
+                        const spent = daySpending[day] || 0;
+                        const heatColor = getHeatColor(day);
+                        const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+                        const isMostSpent = String(day) === String(mostSpentDay);
+                        return (
+                            <div
+                                key={day}
+                                className={`cal-day ${isToday ? 'cal-today' : ''} ${isMostSpent ? 'cal-most-spent' : ''}`}
+                                style={{ background: spent ? heatColor : undefined }}
+                                title={spent ? `₹${spent.toLocaleString()} spent` : 'No expenses'}
+                            >
+                                <span className="cal-day-num">{day}</span>
+                                {spent > 0 && (
+                                    <span className="cal-day-amt">₹{spent >= 1000 ? `${(spent / 1000).toFixed(1)}k` : spent}</span>
+                                )}
+                                {isMostSpent && <span className="cal-flame">🔥</span>}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Month total */}
+                <div className="cal-footer">
+                    <span>Total spent in {calendarDate.toLocaleDateString('en-IN', { month: 'long' })}: </span>
+                    <strong>₹{monthExpenses.reduce((a, e) => a + e.amount, 0).toLocaleString()}</strong>
+                    <span style={{ marginLeft: 16, color: '#94a3b8' }}>({monthExpenses.length} transactions)</span>
+                </div>
+            </div>
+
+            {/* ── Budget Alerts ───────────────────────────── */}
             {budgetExceeded && (
                 <div className="budget-alert danger animate-in">
                     <AlertTriangle size={20} />
@@ -233,68 +291,7 @@ const Analytics = ({ user }) => {
                 </div>
             </div>
 
-            {/* ── Monthly Calendar ────────────────────────── */}
-            <div className="card calendar-card animate-in" style={{ marginTop: 24, animationDelay: '0.2s' }}>
-                <div className="calendar-header">
-                    <h3 style={{ margin: 0 }}>📅 Monthly Spending Calendar</h3>
-                    <div className="cal-nav">
-                        <button className="cal-nav-btn" onClick={prevMonth}><ChevronLeft size={18} /></button>
-                        <span className="cal-month-label">{monthName}</span>
-                        <button className="cal-nav-btn" onClick={nextMonth}><ChevronRight size={18} /></button>
-                    </div>
-                </div>
 
-                {/* Legend */}
-                <div className="cal-legend">
-                    <span><span className="legend-dot" style={{ background: '#86efac' }} />Low</span>
-                    <span><span className="legend-dot" style={{ background: '#f59e0b' }} />Medium</span>
-                    <span><span className="legend-dot" style={{ background: '#f97316' }} />High</span>
-                    <span><span className="legend-dot" style={{ background: '#ef4444' }} />Highest</span>
-                </div>
-
-                {/* Day labels */}
-                <div className="cal-grid">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                        <div key={d} className="cal-day-label">{d}</div>
-                    ))}
-
-                    {/* Empty cells for first day offset */}
-                    {Array.from({ length: firstDay }).map((_, i) => (
-                        <div key={`empty-${i}`} />
-                    ))}
-
-                    {/* Day cells */}
-                    {Array.from({ length: daysInMonth }).map((_, i) => {
-                        const day = i + 1;
-                        const spent = daySpending[day] || 0;
-                        const heatColor = getHeatColor(day);
-                        const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-                        const isMostSpent = String(day) === String(mostSpentDay);
-
-                        return (
-                            <div
-                                key={day}
-                                className={`cal-day ${isToday ? 'cal-today' : ''} ${isMostSpent ? 'cal-most-spent' : ''}`}
-                                style={{ background: spent ? heatColor : undefined }}
-                                title={spent ? `₹${spent.toLocaleString()} spent` : 'No expenses'}
-                            >
-                                <span className="cal-day-num">{day}</span>
-                                {spent > 0 && (
-                                    <span className="cal-day-amt">₹{spent >= 1000 ? `${(spent / 1000).toFixed(1)}k` : spent}</span>
-                                )}
-                                {isMostSpent && <span className="cal-flame">🔥</span>}
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* Month total */}
-                <div className="cal-footer">
-                    <span>Total spent in {calendarDate.toLocaleDateString('en-IN', { month: 'long' })}: </span>
-                    <strong>₹{monthExpenses.reduce((a, e) => a + e.amount, 0).toLocaleString()}</strong>
-                    <span style={{ marginLeft: 16, color: '#94a3b8' }}>({monthExpenses.length} transactions)</span>
-                </div>
-            </div>
 
             <style>{`
                 /* Budget Alert */
