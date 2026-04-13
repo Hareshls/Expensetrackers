@@ -84,20 +84,20 @@ const Auth = ({ onLogin }) => {
                         {loading ? "Please wait..." : (
                             <>
                                 {isLogin ? <LogIn size={20} /> : <UserPlus size={20} />}
-                                {isLogin ? "Sign In" : "Get Started"}
+                                {isLogin ? "Sign In" : "Create Account"}
                             </>
                         )}
                     </button>
-                </form>
 
-
-
-                <p className="auth-footer">
-                    {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-                    <button onClick={() => setIsLogin(!isLogin)}>
-                        {isLogin ? "Sign Up" : "Log In"}
+                    {/* Toggle button - prominent, always visible */}
+                    <button
+                        type="button"
+                        className="toggle-btn"
+                        onClick={() => setIsLogin(!isLogin)}
+                    >
+                        {isLogin ? "Don't have an account? Sign Up →" : "Already have an account? Log In →"}
                     </button>
-                </p>
+                </form>
             </div>
 
             <style>{`
@@ -106,14 +106,19 @@ const Auth = ({ onLogin }) => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #f8fafc;
+          background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
           padding: 20px;
         }
         .auth-container {
           width: 100%;
           max-width: 440px;
-          padding: 40px;
+          padding: 36px;
           border-radius: 24px;
+        }
+        @media (max-width: 480px) {
+          .auth-container {
+            padding: 28px 22px;
+          }
         }
         .auth-header {
            text-align: center;
@@ -172,7 +177,25 @@ const Auth = ({ onLogin }) => {
         .auth-submit {
            margin-top: 10px;
            width: 100%;
-           height: 48px;
+           height: 50px;
+        }
+        .toggle-btn {
+          width: 100%;
+          padding: 14px;
+          background: #f1f5f9;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 12px;
+          color: #6366f1;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-family: inherit;
+          margin-top: 4px;
+        }
+        .toggle-btn:hover {
+          background: #e0e7ff;
+          border-color: #6366f1;
         }
         .auth-divider {
            margin: 24px 0;
