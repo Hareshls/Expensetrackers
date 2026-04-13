@@ -44,10 +44,10 @@ function App() {
       try {
         const loginTime = localStorage.getItem('loginTime');
         const currentTime = new Date().getTime();
-        const oneHour = 60 * 60 * 1000;
+        const tenMinutes = 10 * 60 * 1000;
 
-        // If login time exists and is older than 1 hour, logout immediately
-        if (loginTime && (currentTime - parseInt(loginTime)) > oneHour) {
+        // If login time exists and is older than 10 minutes, logout immediately
+        if (loginTime && (currentTime - parseInt(loginTime)) > tenMinutes) {
           throw new Error('Session expired');
         }
 
@@ -62,7 +62,7 @@ function App() {
     initAuth();
   }, []);
 
-  // Idle Timer for auto logout (60 minutes)
+  // Idle Timer for auto logout (10 minutes)
   useEffect(() => {
     if (!user) return;
 
@@ -73,7 +73,7 @@ function App() {
       idleTimeout = setTimeout(() => {
         addToast("Session Expired", "You've been logged out due to inactivity.", "warning", 5000);
         handleLogout();
-      }, 60 * 60 * 1000); // 1 hour
+      }, 10 * 60 * 1000); // 10 minutes
     };
 
     // Events to track user activity

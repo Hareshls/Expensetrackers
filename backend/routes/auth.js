@@ -12,7 +12,7 @@ const cookieOptions = (req) => {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? 'none' : 'lax',
-        maxAge: 1 * 60 * 60 * 1000 // 1 hour
+        maxAge: 10 * 60 * 1000 // 10 minutes
     };
 };
 
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
         const user = new User({ name, email, password });
         await user.save();
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '10m' });
         res.cookie('token', token, cookieOptions(req));
 
         res.status(201).json({
@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '10m' });
         res.cookie('token', token, cookieOptions(req));
 
         res.status(200).json({
