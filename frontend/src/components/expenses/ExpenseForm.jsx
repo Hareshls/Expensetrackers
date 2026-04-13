@@ -162,6 +162,17 @@ const ExpenseForm = ({ onSubmit, onCancel }) => {
           color: #0f172a;
           width: 100%;
           transition: all 0.2s;
+          box-sizing: border-box;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+        input[type="date"] {
+          text-align: left;
+          cursor: pointer;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          opacity: 0.6;
+          cursor: pointer;
         }
         input::placeholder {
           color: #94a3b8;
