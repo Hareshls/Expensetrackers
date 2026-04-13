@@ -1,5 +1,5 @@
 .analytics-container {
-    padding: 24px;
+    padding: 0;
     animation: fadeIn 0.5s ease-out;
 }
 
@@ -142,5 +142,39 @@
 @media (max-width: 1024px) {
     .analytics-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .analytics-header {
+        margin-bottom: 20px;
+    }
+
+    .analytics-card h3 {
+        font-size: 15px;
+        margin-bottom: 16px;
+    }
+
+    .bar-info {
+        font-size: 12px;
+    }
+
+    .insight-item {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .insight-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .insight-text h4 {
+        font-size: 13px;
+    }
+
+    .insight-text p {
+        font-size: 12px;
     }
 }
