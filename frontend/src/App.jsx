@@ -78,7 +78,7 @@ function App() {
 
     // Events to track user activity
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
-    
+
     events.forEach(event => {
       window.addEventListener(event, resetTimer);
     });

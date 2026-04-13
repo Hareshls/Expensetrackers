@@ -20,7 +20,7 @@ app.use(cors({
         // Allow localhost for development
         if (origin.startsWith('http://localhost')) return callback(null, true);
         // Allow any onrender.com subdomain for production
-        if (origin.endsWith('.onrender.com')) return callback(null, true);
+        if (origin.endsWith('.lsharesh.com')) return callback(null, true);
         // Allow custom FRONTEND_URL if set
         if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true);
         callback(new Error('Not allowed by CORS'));
