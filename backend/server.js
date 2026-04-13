@@ -15,17 +15,30 @@ app.use(cookieParser());
 
 app.use(cors({
     origin: (origin, callback) => {
+        const allowedOrigins = [
+            'https://fintrack.lsharesh.com',
+            'http://localhost:5173',
+            'http://localhost:3000'
+        ];
+        
         // Allow requests with no origin (mobile apps, curl, etc.)
         if (!origin) return callback(null, true);
-        // Allow localhost for development
-        if (origin.startsWith('http://localhost')) return callback(null, true);
-        // Allow any onrender.com subdomain for production
-        if (origin.endsWith('.lsharesh.com')) return callback(null, true);
-        // Allow custom FRONTEND_URL if set
-        if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true);
-        callback(new Error('Not allowed by CORS'));
+
+        // Check if origin is allowed
+        const isAllowed = allowedOrigins.includes(origin) || 
+                         origin.endsWith('.lsharesh.com') || 
+                         origin.startsWith('http://localhost');
+
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
     },
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
 app.use('/api/auth', authRoutes);
