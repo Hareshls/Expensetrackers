@@ -5,6 +5,17 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
+// Cookie options — use secure + sameSite:none on HTTPS (production)
+const cookieOptions = (req) => {
+    const isProduction = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    return {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    };
+};
+
 // Register
 router.post('/register', async (req, res) => {
     try {
@@ -16,7 +27,7 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' });
+        res.cookie('token', token, cookieOptions(req));
 
         res.status(201).json({
             user: { id: user._id, name: user.name, email: user.email, currency: user.currency, monthlyBudget: user.monthlyBudget, salary: user.salary }
@@ -37,7 +48,7 @@ router.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' });
+        res.cookie('token', token, cookieOptions(req));
 
         res.status(200).json({
             user: { id: user._id, name: user.name, email: user.email, currency: user.currency, monthlyBudget: user.monthlyBudget, salary: user.salary }
@@ -49,7 +60,7 @@ router.post('/login', async (req, res) => {
 
 // Logout
 router.post('/logout', (req, res) => {
-    res.clearCookie('token', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' });
+    res.clearCookie('token', cookieOptions(req));
     res.json({ message: 'Logged out' });
 });
 
