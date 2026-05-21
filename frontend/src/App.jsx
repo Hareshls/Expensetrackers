@@ -11,8 +11,25 @@ import { authAPI, expenseAPI } from "./services/api";
 
 function App() {
   const [page, setPage] = useState("dashboard");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+      const loginTime = localStorage.getItem('loginTime');
+      const currentTime = new Date().getTime();
+      const tenMinutes = 10 * 60 * 1000;
+
+      // If login time exists and is older than 10 minutes, session is expired
+      if (loginTime && (currentTime - parseInt(loginTime)) > tenMinutes) {
+        return null;
+      }
+
+      return (savedUser && token) ? JSON.parse(savedUser) : null;
+    } catch (err) {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState(false);
   const { toasts, addToast, removeToast } = useToast();
   const budgetNotified = useRef(false);
 
@@ -41,6 +58,12 @@ function App() {
 
   useEffect(() => {
     const initAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const loginTime = localStorage.getItem('loginTime');
         const currentTime = new Date().getTime();
@@ -53,6 +76,7 @@ function App() {
 
         const response = await authAPI.verifySession();
         setUser(response.data.user);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
       } catch (err) {
         handleLogout();
       } finally {
